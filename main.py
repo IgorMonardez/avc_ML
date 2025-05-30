@@ -1,16 +1,13 @@
-# This is a sample Python script.
+import package.database_processing as database_processing
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import pandas as pd
+import numpy as np
 
+df = pd.read_csv('database/heart_attack_prediction_dataset.csv')
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+database_processing.unique_values(df, "Age", "Sex", "Cholesterol", "Blood Pressure", "Heart Rate", "Diabetes",
+                              "Family History", "Smoking", "Obesity", "Alcohol Consumption", "Exercise Hours Per Week",
+                              "Diet", "Previous Heart Problems", "Medication Use", "Stress Level",
+                              "Sedentary Hours Per Day", "Income", "BMI", "Triglycerides",
+                              "Physical Activity Days Per Week", "Sleep Hours Per Day", "Country", "Continent",
+                              "Hemisphere", "Heart Attack Risk")
