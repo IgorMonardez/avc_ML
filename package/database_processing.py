@@ -1,5 +1,4 @@
+def unique_values(df, columns):
 
-
-def unique_values(df, *args):
-    for column in args:
+    for column in columns:
         print(f"Valores possíveis em {column}:", df[column].unique())
