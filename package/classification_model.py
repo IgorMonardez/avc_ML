@@ -2,7 +2,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, accuracy_score
 
 def train(features_train, target_train, max_iteration=1000):
-    classifier = LogisticRegression(max_iter=max_iteration)
+    classifier = LogisticRegression(max_iter=max_iteration, class_weight='balanced') # Cria um modelo de Regressão Logística com o parâmetro max_iter definido para 1000 e class_weight definido como 'balanced' para lidar com classes desbalanceadas
     classifier.fit(features_train, target_train) # Treina o modelo de Regressão Logística usando os dados de treinamento (features_train e target_train)
 
     return classifier
