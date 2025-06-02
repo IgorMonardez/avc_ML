@@ -16,3 +16,23 @@ def predict(features_test, features_train, target_train, max_iteration=1000):
 def info(target_test, target_predict):
     print("Accuracy:", accuracy_score(target_test, target_predict))
     print(classification_report(target_test, target_predict))
+
+def cross_validation(features, target):
+    clf_cv = DecisionTreeClassifier(
+        criterion='gini',
+        max_depth=3,
+        min_samples_leaf=1,
+        random_state=42
+    )
+    
+    cv = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
+    scoring = ['accuracy', 'precision_macro', 'recall_macro', 'f1_macro']
+    
+    scores = cross_validate(clf_cv, features, target, cv=cv, scoring=scoring)
+    
+    print("===== Validação Cruzada =====")
+    for metric in scoring:
+        mean_score = np.mean(scores[f'test_{metric}'])
+        std_score = np.std(scores[f'test_{metric}'])
+        print(f"{metric}: {mean_score:.3f} (±{std_score:.3f})")
+    
