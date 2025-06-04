@@ -1,4 +1,4 @@
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split  # type: ignore
 
 import package.database_processing as database_processing
 import package.prepare as database_prepare
