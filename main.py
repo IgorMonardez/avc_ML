@@ -14,15 +14,17 @@ columns = ["Age", "Sex", "Cholesterol", "Blood Pressure", "Heart Rate", "Diabete
            "Physical Activity Days Per Week", "Sleep Hours Per Day", "Country", "Continent",
            "Hemisphere", "Heart Attack Risk"]
 
+
 columns_used = columns.remove("Blood Pressure")
 df = pd.read_csv('database/heart_attack_prediction_dataset.csv')
 
 database_processing.unique_values(df, columns)
 
 features, target = database_prepare.features_and_target(df)
-print(features)
-print(target)
+#print(features)
+#print(target)
 
 features_train, features_test, target_train, target_test = train_test_split(features, target, test_size=0.2, random_state=42)
+
 target_predidction_by_classfication = classification_model.predict(features_test, features_train, target_train, max_iteration=1000)
 classification_model.info(target_test, target_predidction_by_classfication)
