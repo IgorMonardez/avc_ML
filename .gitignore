@@ -2,4 +2,4 @@
 package/__pycache__/
 
 # Ignorar todos os arquivos .csv na pasta database/
-database/*.csv
+database/*
