@@ -1,5 +1,5 @@
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.linear_model import LogisticRegression # type: ignore
+from sklearn.metrics import classification_report, accuracy_score # type: ignore
 
 def train(features_train, target_train, max_iteration=1000, c_value=10.0):
     classifier = LogisticRegression(max_iter=max_iteration, class_weight='balanced', C=c_value) # Cria um modelo de Regressão Logística com o parâmetro max_iter definido para 1000 e class_weight definido como 'balanced' para lidar com classes desbalanceadas

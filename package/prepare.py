@@ -1,5 +1,5 @@
-from sklearn.preprocessing import StandardScaler
-import pandas as pd
+from sklearn.preprocessing import StandardScaler # type: ignore
+import pandas as pd # type: ignore
 
 
 def one_hot_encoding(features):

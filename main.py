@@ -2,8 +2,8 @@ from sklearn.model_selection import train_test_split
 
 import package.database_processing as database_processing
 import package.prepare as database_prepare
-import pandas as pd
-import numpy as np
+import pandas as pd # type: ignore
+import numpy as np # type: ignore
 
 from package import classification_model
 
