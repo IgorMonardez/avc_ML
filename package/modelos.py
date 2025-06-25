@@ -14,13 +14,7 @@ from package import prepare
 def random_forest_rank_features():
     df = pd.read_csv('database/heart_attack_prediction_dataset.csv')
 
-    X = df.drop(['Patient ID', 'Heart Attack Risk', 'Previous Heart Problems', 'Alcohol Consumption',
-                 'Family History', 'Medication Use', 'Obesity', 'Diabetes', 'Diet', 'Sex', 'Continent', 'Country',
-                 'Hemisphere'], axis=1)
-
-    y = df['Heart Attack Risk']
-
-    # X = prepare.one_hot_encoding(X)
+    X,y = prepare.features_and_target(df)
 
     X = prepare.split_blood_pressure(X)
 
@@ -57,15 +51,7 @@ def random_forest_rank_features():
 def xgboost_rank_features():
     df = pd.read_csv('database/heart_attack_prediction_dataset.csv')
 
-    X = df.drop(['Patient ID', 'Heart Attack Risk', 'Previous Heart Problems', 'Alcohol Consumption',
-                 'Family History', 'Medication Use', 'Obesity', 'Diabetes', 'Diet', 'Sex', 'Continent', 'Country',
-                 'Hemisphere'], axis=1)
-
-    y = df['Heart Attack Risk']
-
-    # X = prepare.one_hot_encoding(X)
-
-    X = prepare.split_blood_pressure(X)
+    X,y = prepare.features_and_target(df)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
@@ -99,15 +85,7 @@ def xgboost_rank_features():
 def xg_boost():
     df = pd.read_csv('database/heart_attack_prediction_dataset.csv')
 
-    X = df.drop(['Patient ID', 'Heart Attack Risk', 'Previous Heart Problems', 'Alcohol Consumption',
-                 'Family History', 'Medication Use', 'Obesity', 'Diabetes', 'Diet', 'Sex', 'Continent', 'Country',
-                 'Hemisphere'], axis=1)
-
-    y = df['Heart Attack Risk']
-
-    # X = prepare.one_hot_encoding(X)
-
-    X = prepare.split_blood_pressure(X)
+    X, y = prepare.features_and_target(df)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
@@ -117,6 +95,31 @@ def xg_boost():
     xgb_model.fit(X_train, y_train.values.ravel())
 
     y_previsto = xgb_model.predict(X_test)
+
+    # Métricas
+    accuracy = accuracy_score(y_test, y_previsto)
+    print(f"Acurácia: {accuracy:.2f}")
+
+    print("Relatório de Classificação:")
+    print(classification_report(y_test, y_previsto))
+
+    print("Matriz de Confusão:")
+    print(confusion_matrix(y_test, y_previsto))
+
+
+def random_forest():
+    df = pd.read_csv('database/heart_attack_prediction_dataset.csv')
+
+    X,y = prepare.features_and_target(df)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
+    model = RandomForestClassifier(random_state=42)
+
+    scores = cross_val_score(model, X_train, y_train, cv=5)
+
+    model.fit(X_train, y_train)
+
+    y_previsto = model.predict(X_test)
 
     # Métricas
     accuracy = accuracy_score(y_test, y_previsto)

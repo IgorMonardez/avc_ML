@@ -32,3 +32,4 @@ from package import classification_model, modelos
 
 # modelos.xgboost_rank_features()
 modelos.xg_boost()
+modelos.random_forest()
