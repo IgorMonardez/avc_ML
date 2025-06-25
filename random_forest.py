@@ -12,15 +12,17 @@ from package import prepare
 
 df = pd.read_csv('database/heart_attack_prediction_dataset.csv')
 
-X = df.drop(['Patient ID', 'Heart Attack Risk'], axis=1)
+X = df.drop(['Patient ID', 'Heart Attack Risk', 'Previous Heart Problems', 'Alcohol Consumption',
+             'Family History', 'Medication Use', 'Obesity', 'Diabetes', 'Diet','Sex', 'Continent', 'Country',
+             'Hemisphere', 'Smoking'], axis=1)
 
 y = df['Heart Attack Risk']
 
-X = prepare.one_hot_encoding(X)
+# X = prepare.one_hot_encoding(X)
 
 X = prepare.split_blood_pressure(X)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
 model = RandomForestClassifier(random_state=42)
 
 scores = cross_val_score(model, X_train, y_train, cv=5)
@@ -50,16 +52,14 @@ plt.subplots_adjust(left=0.3)
 
 plt.show()
 
+y_previsto = model.predict(X_test)
 
-#
-# y_previsto = model.predict(X_test)
-#
-# # Métricas
-# accuracy = accuracy_score(y_test, y_previsto)
-# print(f"Acurácia: {accuracy:.2f}")
-#
-# print("Relatório de Classificação:")
-# print(classification_report(y_test, y_previsto))
-#
-# print("Matriz de Confusão:")
-# print(confusion_matrix(y_test, y_previsto))
+# Métricas
+accuracy = accuracy_score(y_test, y_previsto)
+print(f"Acurácia: {accuracy:.2f}")
+
+print("Relatório de Classificação:")
+print(classification_report(y_test, y_previsto))
+
+print("Matriz de Confusão:")
+print(confusion_matrix(y_test, y_previsto))

@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def one_hot_encoding(features):
-    x = pd.get_dummies(features, columns=['Sex', 'Diet', 'Country', 'Continent', 'Hemisphere'])
+    x = pd.get_dummies(features)
 
     return x
 

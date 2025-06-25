@@ -5,7 +5,7 @@ import package.prepare as database_prepare
 import pandas as pd # type: ignore
 import numpy as np # type: ignore
 
-from package import classification_model
+from package import classification_model, modelos
 
 columns = ["Age", "Sex", "Cholesterol", "Blood Pressure", "Heart Rate", "Diabetes",
            "Family History", "Smoking", "Obesity", "Alcohol Consumption", "Exercise Hours Per Week",
@@ -28,3 +28,6 @@ features_train, features_test, target_train, target_test = train_test_split(feat
 
 target_predidction_by_classfication = classification_model.predict(features_test, features_train, target_train, max_iteration=1000)
 classification_model.info(target_test, target_predidction_by_classfication)
+
+
+modelos.random_forest()
