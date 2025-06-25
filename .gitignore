@@ -1,0 +1,5 @@
+# Ignorar cache de compilação Python
+package/__pycache__/*
+
+# Ignorar todos os arquivos .csv na pasta database/
+database/*

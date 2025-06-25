@@ -4,6 +4,7 @@ import pandas as pd
 
 def one_hot_encoding(features):
     x = pd.get_dummies(features, columns=['Sex', 'Diet', 'Country', 'Continent', 'Hemisphere'])
+
     return x
 
 
@@ -20,6 +21,14 @@ def features_and_target(df):
     # Dropar colunas desnecessárias
     features = df.drop(columns=['Heart Attack Risk', 'Patient ID'])
     features = one_hot_encoding(features)
+
+    # Seleciona apenas colunas numéricas (após o one-hot)
+    numeric_cols = features.select_dtypes(include=['int64', 'float64']).columns
+
+    # Aplica StandardScaler nas colunas numéricas
+    scaler = StandardScaler()
+    features[numeric_cols] = scaler.fit_transform(features[numeric_cols])
+
     features.to_csv('database/heart_attack_db_features.csv', index=False)
 
     # Seleciona apenas colunas numéricas (após o one-hot)
