@@ -10,7 +10,10 @@ def one_hot_encoding(features):
 
 def split_blood_pressure(df):
     df[['Systolic Pressure', 'Diastolic Pressure']] = df['Blood Pressure'].str.split('/', expand=True).astype(int)
+
+    df['BP Ratio'] = df['Systolic Pressure'] / df['Diastolic Pressure']
     df.drop(columns=['Blood Pressure'], inplace=True)
+
     return df
 
 
@@ -19,9 +22,7 @@ def features_and_target(df):
     df = split_blood_pressure(df)
 
     # Dropar colunas desnecessárias
-    features = df.drop(columns=['Patient ID', 'Heart Attack Risk', 'Previous Heart Problems', 'Alcohol Consumption',
-                                'Family History', 'Medication Use', 'Obesity', 'Diabetes', 'Diet', 'Sex', 'Continent',
-                                'Country', 'Hemisphere'])
+    features = df.drop(columns=['Patient ID', 'Heart Attack Risk'])
     features = one_hot_encoding(features)
 
     # Seleciona apenas colunas numéricas (após o one-hot)
