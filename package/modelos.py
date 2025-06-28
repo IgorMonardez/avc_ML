@@ -9,7 +9,7 @@ import xgboost as xgb
 import sys
 from package import database_processing
 from package import prepare
-
+from imblearn.over_sampling import SMOTE
 
 def random_forest_rank_features():
     df = pd.read_csv('database/heart_attack_prediction_dataset.csv')
@@ -59,7 +59,7 @@ def xgboost_rank_features():
 
     X = df.drop(['Patient ID', 'Heart Attack Risk', 'Previous Heart Problems', 'Alcohol Consumption',
                  'Family History', 'Medication Use', 'Obesity', 'Diabetes', 'Diet', 'Sex', 'Continent', 'Country',
-                 'Hemisphere'], axis=1)
+                'Hemisphere'], axis=1)
 
     y = df['Heart Attack Risk']
 
@@ -68,6 +68,8 @@ def xgboost_rank_features():
     X = prepare.split_blood_pressure(X)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    smote = SMOTE(random_state=42)
+    X_train, y_train = smote.fit_resample(X_train, y_train)
 
     xgb_model = xgb.XGBClassifier(random_state=42)
 
@@ -99,24 +101,31 @@ def xgboost_rank_features():
 def xg_boost():
     df = pd.read_csv('database/heart_attack_prediction_dataset.csv')
 
-    X = df.drop(['Patient ID', 'Heart Attack Risk', 'Previous Heart Problems', 'Alcohol Consumption',
-                 'Family History', 'Medication Use', 'Obesity', 'Diabetes', 'Diet', 'Sex', 'Continent', 'Country',
-                 'Hemisphere'], axis=1)
+    #X = df.drop(['Patient ID', 'Heart Attack Risk', 'Previous Heart Problems', 'Alcohol Consumption',
+    #             'Family History', 'Medication Use', 'Obesity', 'Diabetes', 'Diet', 'Sex', 'Continent', 'Country',
+    #             'Hemisphere'], axis=1)
+
+    X = df.drop(['Heart Attack Risk','Patient ID','Country', 'Continent', 'Hemisphere'], axis=1)
+    X = prepare.split_blood_pressure(X)
+    X = pd.get_dummies(X)
 
     y = df['Heart Attack Risk']
 
     # X = prepare.one_hot_encoding(X)
 
-    X = prepare.split_blood_pressure(X)
+    # X = prepare.split_blood_pressure(X)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
+    neg, pos = np.bincount(y_train)
+    ratio = pos/neg
     xgb_model = xgb.XGBClassifier(random_state=42)
-
     # Treinar o modelo XGBoost com os dados de treinamento
     xgb_model.fit(X_train, y_train.values.ravel())
-
-    y_previsto = xgb_model.predict(X_test)
+  #   y_previsto = xgb_model.predict(X_test)
+    y_probs = xgb_model.predict_proba(X_test)
+    threshold = 0.3
+    y_previsto = (y_probs[:, 1]>= threshold).astype(int)
 
     # Métricas
     accuracy = accuracy_score(y_test, y_previsto)

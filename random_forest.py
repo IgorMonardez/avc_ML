@@ -6,6 +6,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import matplotlib.pyplot as plt
+from imblearn.over_sampling import SMOTE
 
 from package import database_processing
 from package import prepare
@@ -23,6 +24,8 @@ y = df['Heart Attack Risk']
 X = prepare.split_blood_pressure(X)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
+SMOTE = SMOTE(random_state=42)
+X_train, y_train = SMOTE.fit_resample(X_train, y_train)
 model = RandomForestClassifier(random_state=42)
 
 scores = cross_val_score(model, X_train, y_train, cv=5)
