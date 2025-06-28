@@ -23,28 +23,18 @@ def features_and_target(df):
 
     # Dropar colunas desnecessárias
     features = df.drop(columns=['Patient ID', 'Heart Attack Risk'])
+ 
     features = one_hot_encoding(features)
 
     # Seleciona apenas colunas numéricas (após o one-hot)
     numeric_cols = features.select_dtypes(include=['int64', 'float64']).columns
+    non_binary_numeric_cols = [col for col in numeric_cols if features[col].nunique() > 2]
 
     # Aplica StandardScaler nas colunas numéricas
     scaler = StandardScaler()
-    features[numeric_cols] = scaler.fit_transform(features[numeric_cols])
+    features[non_binary_numeric_cols] = scaler.fit_transform(features[non_binary_numeric_cols])
 
     features.to_csv('database/heart_attack_db_features.csv', index=False)
-
-    # Seleciona apenas colunas numéricas (após o one-hot)
-    numeric_cols = features.select_dtypes(include=['int64', 'float64']).columns
-
-    # Diagnóstico das escalas numéricas antes da normalização
-    # numeric_cols = features.select_dtypes(include=['int64', 'float64']).columns
-    # print("Diagnóstico das escalas numéricas antes da normalização:\n")
-    # print(features[numeric_cols].describe())
-
-    # Aplica StandardScaler nas colunas numéricas
-    scaler = StandardScaler()
-    features[numeric_cols] = scaler.fit_transform(features[numeric_cols])
 
     # Target
     target = df['Heart Attack Risk']
